@@ -1,0 +1,11 @@
+.osiris_pid
+.shutdown_pid
+.DS_Store
+baks
+tmp
+patches
+server.log
+zzz_*
+*.bak1
+*.bak2
+*.bak*
