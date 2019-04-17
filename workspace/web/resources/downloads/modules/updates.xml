@@ -1,15 +1,15 @@
 <app>
 <env>
 app.title=ETRACS 2.5 build 05 20190127_001 (ICWS)
-app.host=192.168.2.2:8070
+app.host=localhost:8070
 app.cluster=osiris3
 app.context=etracs25
-app.help=http://192.168.2.2:8080/help
+app.help=http://localhost:8080/help
 app.loader=com.rameses.osiris2.client.OsirisAppLoader
 readTimeout=50000
 connectionTimeout=5000
 
-#ws.host=192.168.2.2:8060
+#ws.host=localhost:8060
 </env>
 <modules>
  
@@ -51,5 +51,6 @@ connectionTimeout=5000
 
 	<module file="plugins/rameses-queueing.jar" version="2.01"/>
 	<module file="plugins/rameses-gov-etracs-waterworks.jar" version="2.30"/>
+	<module file="plugins/rameses-gov-etracs-waterworks-report.jar" version="2.00"/>
 </modules>
 </app>
