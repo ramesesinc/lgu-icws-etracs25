@@ -1,3 +1,4 @@
+[getReport]
 select 
 	barangay_objid, barangay_name, 
 	sum(res_range1) as res_range1, sum(res_range2) as res_range2, sum(res_range3) as res_range3, 

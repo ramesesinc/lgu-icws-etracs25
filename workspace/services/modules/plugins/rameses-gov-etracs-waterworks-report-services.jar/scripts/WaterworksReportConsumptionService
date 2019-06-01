@@ -30,17 +30,27 @@ class WaterworksReportConsumptionService {
 
 	@ProxyMethod 
 	public def getReport( param ) {
+		if ( !param.year ) throw new Exception('Please specify year'); 
+
+		param.monthindexno = param.month?.index;
+		if ( !param.monthindexno ) throw new Exception('Please specify month'); 
+
+		def str = ''+ param.year +'-'+ param.monthindexno.toString().padLeft(2,'0') +'-01'; 
+		def dateObj = new java.text.SimpleDateFormat('yyyy-MM-dd').parse( str ); 
+		def PERIOD = 'FOR THE MONTH OF '+ new java.text.SimpleDateFormat('MMMMM yyyy').format( dateObj );
+
 		def serverdate = dateSvc.getBasicServerDate();
 
 		def filters = []; 
 		param.barangayid = param.barangay?.objid; 		
 		if ( !param.barangayid ) param.barangayid = '%';  
 
+		filters << ''' bs.month = $P{monthindexno} ''';
 		filters << ''' sn.barangay_objid LIKE $P{barangayid} '''; 
 		param.filters = ' AND '+ filters.join(' AND '); 
 		
 		def res = [:]; 
-		res.header = [serverdate: serverdate]; 
+		res.header = [serverdate: serverdate, PERIOD: PERIOD.toUpperCase()]; 
 		res.items = mainreport_db.getReport( param ); 
 		return res; 
 	} 
