@@ -12,7 +12,9 @@ connectionTimeout=5000
 #ws.host=localhost:8060
 </env>
 <modules>
- 
+	<!-- custom libraries -->
+	<module file="custom/gov-lgu-icws-main.jar" version="1.00"/>
+
 	<!-- core libraries -->
 	<module file="core/osiris2-client-themes.jar" version="2.10"/>
 	<module file="core/osiris2-client-ui.jar" version="2.10"/>
