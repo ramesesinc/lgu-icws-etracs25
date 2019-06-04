@@ -46,7 +46,7 @@ class WaterworksReportConsumptionService {
 		if ( !param.barangayid ) param.barangayid = '%';  
 
 		filters << ''' bs.month = $P{monthindexno} ''';
-		filters << ''' sn.barangay_objid LIKE $P{barangayid} '''; 
+		filters << ''' so.barangay_objid LIKE $P{barangayid} '''; 
 		param.filters = ' AND '+ filters.join(' AND '); 
 		
 		def res = [:]; 

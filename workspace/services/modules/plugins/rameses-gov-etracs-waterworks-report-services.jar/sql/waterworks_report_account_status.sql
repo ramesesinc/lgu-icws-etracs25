@@ -7,7 +7,7 @@ select
 	sum(ind_inactive) as ind_inactive, sum(bulk_inactive) as bulk_inactive 
 from ( 
 	select 
-		sn.barangay_objid, sn.barangay_name, 
+		so.barangay_objid, so.barangay_name, 
 		case 
 			when wa.classificationid='RESIDENTIAL' and wm.state <> 'DISCONNECTED' then 1 
 			when wa.classificationid='RESIDENTIAL' and wa.state = 'ACTIVE' then 1 
@@ -50,12 +50,13 @@ from (
 		end as bulk_inactive  
 	from waterworks_account wa  
 		inner join waterworks_meter wm on wm.objid = wa.meterid 
-		inner join vw_waterworks_stubout_node sn on sn.objid = wa.stuboutnodeid 
+		inner join waterworks_stubout_node sn on sn.objid = wa.stuboutnodeid  
+		inner join waterworks_stubout so on so.objid = sn.stuboutid 
 
 	union all 
 
 	select 
-		sn.barangay_objid, sn.barangay_name, 
+		so.barangay_objid, so.barangay_name, 
 		case 
 			when wa.classificationid='RESIDENTIAL' and wa.state = 'ACTIVE' then 1 
 			else 0 
@@ -89,8 +90,10 @@ from (
 			else 0 
 		end as bulk_inactive  
 	from waterworks_account wa  
-		inner join vw_waterworks_stubout_node sn on sn.objid = wa.stuboutnodeid 
+		inner join waterworks_stubout_node sn on sn.objid = wa.stuboutnodeid  
+		inner join waterworks_stubout so on so.objid = sn.stuboutid 
 	where wa.meterid is null 
 )t1 
 where barangay_objid is not null ${filters} 
 group by barangay_objid, barangay_name 
+order by barangay_name 

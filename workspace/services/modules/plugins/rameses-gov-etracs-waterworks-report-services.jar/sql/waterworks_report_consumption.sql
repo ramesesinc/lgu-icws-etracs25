@@ -13,7 +13,7 @@ select
 	sum(gov_range4) as gov_range4, sum(gov_range5) as gov_range5, sum(gov_range6) as gov_range6
 from ( 
 	select 
-		sn.barangay_objid, sn.barangay_name, 
+		so.barangay_objid, so.barangay_name, 
 		case when a.classificationid='RESIDENTIAL' and c.volume between 00 and 10 then 1 else 0 end as res_range1,  
 		case when a.classificationid='RESIDENTIAL' and c.volume between 11 and 20 then 1 else 0 end as res_range2, 
 		case when a.classificationid='RESIDENTIAL' and c.volume between 21 and 30 then 1 else 0 end as res_range3, 
@@ -47,7 +47,9 @@ from (
 	from waterworks_billing_schedule bs 
 		inner join waterworks_consumption c on (c.scheduleid = bs.objid and c.state='POSTED')
 		inner join waterworks_account a on a.objid = c.acctid 
-		inner join vw_waterworks_stubout_node sn on sn.objid = a.stuboutnodeid 
+		inner join waterworks_stubout_node sn on sn.objid = a.stuboutnodeid  
+		inner join waterworks_stubout so on so.objid = sn.stuboutid 
 	where bs.year = $P{year} ${filters} 
 )t1 
 group by barangay_objid, barangay_name 
+order by barangay_name
