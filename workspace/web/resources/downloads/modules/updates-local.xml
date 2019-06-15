@@ -1,0 +1,58 @@
+<app>
+<env>
+app.title=ETRACS 2.5 build 05 20190127_001 (ICWS)
+app.host=localhost:8070
+app.cluster=osiris3
+app.context=etracs25
+app.help=http://localhost:8080/help
+app.loader=com.rameses.osiris2.client.OsirisAppLoader
+readTimeout=50000
+connectionTimeout=5000
+
+#ws.host=localhost:8060
+</env>
+<modules>
+	<!-- custom libraries -->
+	<module file="custom/gov-lgu-icws-main.jar" version="1.00"/>
+
+	<!-- core libraries -->
+	<module file="core/osiris2-client-themes.jar" version="2.10"/>
+	<module file="core/osiris2-client-ui.jar" version="2.10"/>
+	<module file="core/osiris2-draw.jar" version="2.10"/>
+	<module file="core/osiris2-framework.jar" version="2.10"/>
+	<module file="core/osiris2-report.jar" version="2.10"/>
+	<module file="core/rameses-client-ui.jar" version="2.10"/>
+	<module file="core/rameses-client-ui-bio.jar" version="2.10"/>
+	<module file="core/rameses-common2.jar" version="2.10"/>
+	<module file="core/rameses-custom-impl.jar" version="2.10"/>
+	<module file="core/rameses-jdbc16.jar" version="2.10"/>
+	<module file="core/rameses-seti.jar" version="2.10"/>
+ 
+	<!-- shared libraries -->
+	<module file="shared/client-system.jar" version="2.10"/>
+	<module file="shared/client-ui-extended.jar" version="2.10"/>
+	<module file="shared/rameses-client-menu.jar" version="2.10"/>
+	<module file="shared/rameses-client-report.jar" version="2.10"/>
+	<module file="shared/rameses-enterprise.jar" version="2.03"/>
+	<module file="shared/rameses-enterprise-admin.jar" version="2.01"/>
+	<module file="shared/rameses-enterprise-entity.jar" version="2.01"/>
+	<module file="shared/rameses-enterprise-financial.jar" version="2.01"/>
+	<module file="shared/rameses-rules-mgmt.jar" version="2.10"/>
+	<module file="shared/rameses-workflow-mgmt.jar" version="2.10"/>
+ 
+	<!-- main app libraries -->
+	<module file="rameses-etracs-main.jar" version="2.01"/>
+	<module file="rameses-gov-depositslip.jar" version="2.01"/>
+	<module file="rameses-gov-etracs-tools.jar" version="2.01"/>
+	<module file="rameses-gov-lgu.jar" version="2.01"/>
+	<module file="rameses-gov-lgu-treasury.jar" version="2.01"/>
+	<module file="rameses-gov-treasury.jar" version="2.03"/>
+	<module file="rameses-gov-treasury-report.jar" version="2.03"/>
+	<module file="rameses-gov-treasury-tool.jar" version="2.03"/>
+	<module file="rameses-treasury-common.jar" version="2.11"/>	
+
+	<module file="plugins/rameses-queueing.jar" version="2.01"/>
+	<module file="plugins/rameses-gov-etracs-waterworks.jar" version="2.30"/>
+	<module file="plugins/rameses-gov-etracs-waterworks-report.jar" version="2.00"/>
+</modules>
+</app>
