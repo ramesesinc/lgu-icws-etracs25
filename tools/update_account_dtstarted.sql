@@ -36,22 +36,24 @@ where dtstarted is null
 
 
 -- 3. fetch the first reading 
-select a.objid, 
-	(
-		select min(bb.readingdate) as readingdate  
-		from waterworks_billing b 
+update 
+	waterworks_account aa, ( 
+		select t1.objid, min(bb.readingdate) as readingdate 
+		from ( select objid from ztmp_account_startdate limit 5000,1000 )t1  
+			inner join waterworks_billing b on b.acctid = t1.objid 
 			inner join waterworks_batch_billing bb on bb.objid = b.batchid 
-		where b.acctid = a.objid 
-	) as startdate   
-from ztmp_account_startdate a 
-; 
+		group by t1.objid 
+	)bb 
+set aa.dtstarted = bb.readingdate 
+where aa.objid = bb.objid 
+;
 
--- 3. update the actual records   
+-- 4. update the actual records   
 update waterworks_account aa, ztmp_account_startdate bb 
 set aa.dtstarted = bb.startdate 
 where aa.objid = bb.objid 
 ;
 
--- 4. drop temporary table 
+-- 5. drop temporary table 
 drop table ztmp_account_startdate
 ;
