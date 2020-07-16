@@ -1,0 +1,72 @@
+import com.rameses.annotations.*;
+import waterworks.facts.*;
+import treasury.facts.*;
+
+class WaterworksScheduleToolService {
+
+	@Service("RuleExecutorService")
+	def ruleSvc;
+
+	@Service("HolidayService")
+	def holidaySvc;
+
+	@DataContext("waterworks_billing_schedule")
+	def skedEm;	
+
+	@ProxyMethod  
+	public def recalcBillingSchedule( param ) {
+		if ( !param.year ) throw new Exception("year is required");
+		if ( !param.month ) throw new Exception("month is required");
+		if ( !param.scheduleid ) throw new Exception("scheduleid is required");
+
+		param.year = Integer.parseInt( param.year.toString() ); 
+		param.month = Integer.parseInt( param.month.toString() ); 
+
+		def sked = skedEm.find([ scheduleid: param.scheduleid, year: param.year, month: param.month ]).first();
+		if ( !sked?.objid ) throw new Exception("'"+ param.scheduleid +"' schedule not found"); 
+
+		def facts = [];
+		facts << new WaterBlockSchedule( id: param.scheduleid );
+		facts << new BillingPeriod( year: param.year, month : param.month );
+		
+		//include holidays
+		facts << new HolidayFact(  
+			handler: { dt->
+				def h = holidaySvc.lookup( dt );
+				return ( h != null);
+			}
+		);
+
+		def res = ruleSvc.execute( "waterworksbillingschedule", facts, null, null );
+
+		def m = [:];
+		m.putAll( sked ); 
+		facts.each {
+			if ( it instanceof VarDate ) {
+				m[(it.tag)] = it.date;
+			}
+		} 
+
+		m = skedEm.update( m ); 
+		return m; 
+	}
+
+
+	@Async
+	@ProxyMethod(local=true)
+	public void recalcAll( param ) {
+		if ( !param.year ) throw new Exception("year is required");
+		if ( !param.month ) throw new Exception("month is required");
+
+		param.year = Integer.parseInt( param.year.toString() ); 
+		param.month = Integer.parseInt( param.month.toString() ); 
+
+		def filtermap = [year: param.year, month: param.month]; 
+		skedEm.where('year = :year AND month >= :month', filtermap).list().each{ b-> 
+			try {
+				recalcBillingSchedule( b ); 
+				println 'recalc '+ b.scheduleid +' ['+ b.year +':'+ b.month +']';
+			} catch(Throwable t) {;} 
+		} 
+	}
+} 

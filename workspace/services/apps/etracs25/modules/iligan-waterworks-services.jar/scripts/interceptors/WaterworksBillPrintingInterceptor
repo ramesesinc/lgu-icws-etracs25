@@ -85,14 +85,20 @@ class WaterworksBillPrintingInterceptor{
         totals.credits = p.credits; 
         totals.otherfees = p.otherfees; 
         totals.totalbill = (totals.amount + totals.otherfees + totals.arrears) - totals.credits; 
+        if ( totals.totalbill > 0.0 ) {
+            totals.surcharge = totals.amount * 0.14; 
+        } else {
+            totals.surcharge = 0.0; 
+        }
+        totals.surcharge = roundNearest10( totals.surcharge ); 
         totals.amtwithsurcharge = totals.amount + totals.surcharge; 
 
-        if ((totals.arrears + totals.surcharge + totals.interest) > 0) {
+        if (totals.arrears > 0) {
             p.discdate = null; 
             totals.amtwithdisc = null; 
         } 
         else if ( has_discount ) {
-	     def dd = totals.amount * 0.05; 
+            def dd = totals.amount * 0.05; 
             totals.discount = new BigDecimal( new java.text.DecimalFormat("0.0").format( dd )); 
             totals.amtwithdisc = totals.amount - totals.discount; 
         }
